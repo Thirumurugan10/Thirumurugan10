@@ -1,40 +1,52 @@
 name: Metrics
+
 on:
   # Runs automatically every day at 00:00 UTC
   schedule:
     - cron: "0 0 * * *"
-  # Runs on every push to this repo
+
+  # Runs on every push to the main branch
   push:
     branches:
       - main
-  # Lets you trigger it manually from the Actions tab
+
+  # Allows manual execution from the Actions tab
   workflow_dispatch:
 
 jobs:
   github-metrics:
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
+
     steps:
       - uses: lowlighter/metrics@latest
         with:
-          # Required token — uses the default Actions token, no setup needed
+          # GitHub Actions built-in token
           token: ${{ secrets.GITHUB_TOKEN }}
+
+          # GitHub username
           user: Thirumurugan10
+
+          # Template
           template: classic
+
+          # Base metrics
           base: header, activity, community, repositories
+
+          # Timezone
           config_timezone: Asia/Kolkata
 
-          # --- Repos / followers / stats summary ---
-          plugin_isocalendar: no
+          # --- Repository / contribution activity ---
           plugin_lines: yes
           plugin_lines_sections: base
 
-          # --- 3D isometric contribution calendar ---
+          # --- 3D Isometric Contribution Calendar ---
           plugin_isocalendar: yes
           plugin_isocalendar_duration: full-year
 
-          # --- Commit activity per day / time of day ---
+          # --- Commit Activity ---
           plugin_habits: yes
           plugin_habits_charts_type: bar
           plugin_habits_facts: yes
@@ -42,7 +54,7 @@ jobs:
           plugin_habits_days: yes
           plugin_habits_times: yes
 
-          # --- Most used languages ---
+          # --- Most Used Languages ---
           plugin_languages: yes
           plugin_languages_analysis_timeout: 15
           plugin_languages_categories: markup, programming
@@ -53,6 +65,6 @@ jobs:
           plugin_languages_sections: most-used
           plugin_languages_threshold: 0%
 
-          # --- Style ---
+          # --- Display ---
           config_display: large
           config_output: svg
