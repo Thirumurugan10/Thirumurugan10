@@ -1,0 +1,58 @@
+name: Metrics
+on:
+  # Runs automatically every day at 00:00 UTC
+  schedule:
+    - cron: "0 0 * * *"
+  # Runs on every push to this repo
+  push:
+    branches:
+      - main
+  # Lets you trigger it manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  github-metrics:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: lowlighter/metrics@latest
+        with:
+          # Required token — uses the default Actions token, no setup needed
+          token: ${{ secrets.GITHUB_TOKEN }}
+          user: Thirumurugan10
+          template: classic
+          base: header, activity, community, repositories
+          config_timezone: Asia/Kolkata
+
+          # --- Repos / followers / stats summary ---
+          plugin_isocalendar: no
+          plugin_lines: yes
+          plugin_lines_sections: base
+
+          # --- 3D isometric contribution calendar ---
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
+
+          # --- Commit activity per day / time of day ---
+          plugin_habits: yes
+          plugin_habits_charts_type: bar
+          plugin_habits_facts: yes
+          plugin_habits_from: 200
+          plugin_habits_days: yes
+          plugin_habits_times: yes
+
+          # --- Most used languages ---
+          plugin_languages: yes
+          plugin_languages_analysis_timeout: 15
+          plugin_languages_categories: markup, programming
+          plugin_languages_colors: github
+          plugin_languages_limit: 8
+          plugin_languages_recent_categories: markup, programming
+          plugin_languages_recent_load: 300
+          plugin_languages_sections: most-used
+          plugin_languages_threshold: 0%
+
+          # --- Style ---
+          config_display: large
+          config_output: svg
